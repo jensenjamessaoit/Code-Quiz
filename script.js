@@ -16,6 +16,7 @@ var choiceContainer = document.getElementById('choice_container');
 //end selector
 var endPrompt = document.getElementById('quiz_end');
 var endRetry = document.getElementById('GO_AGAIN');
+var finalScore = document.getElementById('final_score');
 
 // question array
 const questionArray = [
@@ -48,6 +49,9 @@ const questionArray = [
 
 //start quiz function
 function startQuiz() {
+    //resets counters
+    score = 0;
+    questionIndex = 0;
     // hides start prompt
     startPrompt.style.display = 'none';
     endPrompt.style.display = 'none';
@@ -55,16 +59,12 @@ function startQuiz() {
 
     // makes question start
     displayQuestion();
-
-    score = 0;
-    questionIndex = 0;
 }
 
 function displayQuestion(){
     if(questionIndex < questionArray.length){
         //current question
         var curQ = questionArray[questionIndex];
-        console.log(curQ);
         //display question
         questionContainer.textContent = curQ.question;
 
@@ -87,6 +87,7 @@ function checkAnswer(answer){
     var curQ = questionArray[questionIndex];
     if(answer === curQ.answer){
         console.log(`${questionIndex + 1} correct`);
+        score++;
     }
     else{
         console.log(`${questionIndex + 1} wrong`);
@@ -98,6 +99,7 @@ function checkAnswer(answer){
 function endQuiz(){
     quizContainer.style.display = 'none';
     endPrompt.style.display = 'block';
+    finalScore.textContent = `${score}`;
 }
 
 
