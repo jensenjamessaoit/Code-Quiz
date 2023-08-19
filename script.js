@@ -1,14 +1,21 @@
 //variables
 var score = 0;
 var questionIndex = 0;
+var time = 30;
+var timer;
 
 //start selectors
 var startPrompt = document.getElementById('quiz_start');
 var startButton = document.getElementById('start_button');
 
 //question and answer selectors
+var quizContainer = document.getElementById('quiz');
 var questionContainer = document.getElementById('question_container');
 var choiceContainer = document.getElementById('choice_container');
+
+//end selector
+var endPrompt = document.getElementById('quiz_end');
+var endRetry = document.getElementById('GO_AGAIN');
 
 // question array
 const questionArray = [
@@ -41,22 +48,61 @@ const questionArray = [
 
 //start quiz function
 function startQuiz() {
-    questionIndex = 0;
     // hides start prompt
-    startPrompt.style.visibility = 'hidden';
+    startPrompt.style.display = 'none';
+    endPrompt.style.display = 'none';
+    quizContainer.style.display = 'block';
+
+    // makes question start
+    displayQuestion();
+
+    score = 0;
+    questionIndex = 0;
 }
 
-function shuffleArray(array) {
-    for(var i = (array.length -1); i > 0; i--) {
-        var rng = Math.floor(Math.random() * (i + 1));
-        var temp = array[i];
-        array[i] = array[rng];
-        array[rng] = temp;
+function displayQuestion(){
+    if(questionIndex < questionArray.length){
+        //current question
+        var curQ = questionArray[questionIndex];
+        console.log(curQ);
+        //display question
+        questionContainer.textContent = curQ.question;
+
+        //clear choices
+        choiceContainer.innerHTML = '';
+        //display choices
+        for(let i = 0; i < curQ.choice.length; i++){
+            var button = document.createElement('button');
+            button.textContent = curQ.choice[i];
+            button.addEventListener('click', function(){checkAnswer(curQ.choice[i])});
+            choiceContainer.appendChild(button);
+        }
     }
-    var shuffledArray = array;
-    return shuffledArray;
+    else{
+        endQuiz();
+    }
+}
+
+function checkAnswer(answer){
+    var curQ = questionArray[questionIndex];
+    if(answer === curQ.answer){
+        console.log(`${questionIndex + 1} correct`);
+    }
+    else{
+        console.log(`${questionIndex + 1} wrong`);
+    }
+    questionIndex++;
+    displayQuestion();
+}
+
+function endQuiz(){
+    quizContainer.style.display = 'none';
+    endPrompt.style.display = 'block';
 }
 
 
 //start quiz event listener
 startButton.addEventListener('click', startQuiz);
+
+//end quiz event listener
+endRetry.addEventListener('click', startQuiz);
