@@ -15,8 +15,10 @@ var choiceContainer = document.getElementById('choice_container');
 
 //end selector
 var endPrompt = document.getElementById('quiz_end');
-var endRetry = document.getElementById('GO_AGAIN');
 var finalScore = document.getElementById('final_score');
+var nameCont = document.getElementById('name_container');
+var inpName = document.getElementById('user_name');
+var buttonSave = document.getElementById('save_score');
 
 // question array
 const questionArray = [
@@ -96,15 +98,43 @@ function checkAnswer(answer){
     displayQuestion();
 }
 
-function endQuiz(){
-    quizContainer.style.display = 'none';
-    endPrompt.style.display = 'block';
-    finalScore.textContent = `${score}`;
+const resultArray = [];
+
+const result = {
+    userName: '',
+    userScore: 0
 }
 
+function endQuiz(){
+    //hides quiz menu and shows end screen
+    quizContainer.style.display = 'none';
+    endPrompt.style.display = 'block';
+    
+    //display score
+    finalScore.textContent = ` ${score}`;
+
+    //saves score into result object
+    result.userScore = score;
+}
+
+function saveResult(){
+    // save name from input into result object
+    result.userName = inpName.value;
+    
+    // put in result array
+    resultArray.push(result);
+    console.log(resultArray);
+
+    // save into local storage
+    localStorage.setItem('results', JSON.stringify(resultArray));
+    
+    console.log(JSON.parse(localStorage.getItem('results')));
+    
+    startQuiz();
+}
 
 //start quiz event listener
 startButton.addEventListener('click', startQuiz);
 
 //end quiz event listener
-endRetry.addEventListener('click', startQuiz);
+buttonSave.addEventListener('click', saveResult);
