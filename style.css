@@ -1,0 +1,44 @@
+#header {
+    font-weight: 100;
+    display: flex;
+    justify-content: center;
+    margin: 5px;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    font-family: monospace;
+    color: #edcfa3;
+    background: #121212;
+}
+
+button {
+    background-color: #edc07e;
+    color: black;
+    border: none;
+    height: 24px;
+    margin: 3px;
+    border-radius: 12px;
+    width: fit-content;
+    padding: 0px 10px 0px 10px;
+}
+
+#quiz_start {
+    align-items: center;
+}
+
+#question_container {
+    font-weight: 100;
+    font-size: 20px;
+}
+
+#choice_container {
+    display: flex;
+    flex-direction: column;
+}
+
+#prev_score {
+    list-style: none;
+    padding: inherit;
+}

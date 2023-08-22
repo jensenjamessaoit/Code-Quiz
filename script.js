@@ -1,7 +1,7 @@
 //variables
 var score = 0;
 var questionIndex = 0;
-var time = 30;
+var time = 21;
 var timer;
 
 //start selectors
@@ -9,6 +9,8 @@ var startPrompt = document.getElementById('quiz_start');
 var startButton = document.getElementById('start_button');
 
 //question and answer selectors
+var timeContainer = document.getElementById('time');
+var timerContainer = document.getElementById('timer');
 var quizContainer = document.getElementById('quiz');
 var questionContainer = document.getElementById('question_container');
 var choiceContainer = document.getElementById('choice_container');
@@ -16,9 +18,10 @@ var choiceContainer = document.getElementById('choice_container');
 //end selector
 var endPrompt = document.getElementById('quiz_end');
 var finalScore = document.getElementById('final_score');
-var nameCont = document.getElementById('name_container');
+var prevScore = document.getElementById('prev_score');
 var inpName = document.getElementById('user_name');
 var buttonSave = document.getElementById('save_score');
+
 
 // question array
 const questionArray = [
@@ -61,9 +64,12 @@ function startQuiz() {
 
     // makes question start
     displayQuestion();
+    startTimer();
+    prevScore.innerHTML = '';
 }
 
 function displayQuestion(){
+    timeContainer.style.display = 'block';
     if(questionIndex < questionArray.length){
         //current question
         var curQ = questionArray[questionIndex];
@@ -85,6 +91,19 @@ function displayQuestion(){
     }
 }
 
+function startTimer(){
+    time = 21;
+    timer = setInterval(function (){
+        if(time > 0){
+            time--;
+            timerContainer.textContent = `${time} seconds`
+        }
+        else {
+            endQuiz();
+        }
+    },1000)
+}
+
 function checkAnswer(answer){
     var curQ = questionArray[questionIndex];
     if(answer === curQ.answer){
@@ -93,12 +112,11 @@ function checkAnswer(answer){
     }
     else{
         console.log(`${questionIndex + 1} wrong`);
+        time -= 5;
     }
     questionIndex++;
     displayQuestion();
 }
-
-const resultArray = [];
 
 const result = {
     userName: '',
@@ -107,29 +125,39 @@ const result = {
 
 function endQuiz(){
     //hides quiz menu and shows end screen
+    timeContainer.style.display = 'none';
     quizContainer.style.display = 'none';
     endPrompt.style.display = 'block';
-    
-    //display score
+    clearInterval(timer);
+
+    //display current score
     finalScore.textContent = ` ${score}`;
 
-    //saves score into result object
-    result.userScore = score;
+    //display last score
+    const savedResults = JSON.parse(localStorage.getItem('results'));
+    for(let i = 0; i < savedResults.length; i++){
+        const curResult = savedResults[i];
+        const listElement = document.createElement('li');
+        listElement.textContent = `Name: ${curResult.userName}  Score: ${curResult.userScore}`;
+        prevScore.appendChild(listElement);
+    }
 }
 
 function saveResult(){
-    // save name from input into result object
+    const savedResults = JSON.parse(localStorage.getItem('results')) || [];
+
+    // save name and score from input into result object
+    result.userScore = score;
     result.userName = inpName.value;
     
     // put in result array
-    resultArray.push(result);
-    console.log(resultArray);
+    savedResults.push(result);
 
     // save into local storage
-    localStorage.setItem('results', JSON.stringify(resultArray));
+    localStorage.setItem('results', JSON.stringify(savedResults));
     
-    console.log(JSON.parse(localStorage.getItem('results')));
-    
+    inpName.value = '';
+    prevScore.innerHTML = '';
     startQuiz();
 }
 

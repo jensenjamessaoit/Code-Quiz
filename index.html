@@ -6,7 +6,8 @@
     </head>
     <body>
         <header>
-            <h1>code quiz</h1>
+            <h1 id="header">code quiz</h1>
+            <h4 id="time" style="display: none;">Time: <span id="timer"></span></h4>
         </header>
         <main>
             <!-- quiz start -->
@@ -29,6 +30,10 @@
                 <!-- list of previous scores -->
                 <input type="text" placeholder="Name" id="user_name">
                 <button id="save_score">Save and Retry</button>
+                <div>
+                    <h3>Previous Scores</h3>
+                    <ul id="prev_score"></ul>
+                </div>
             </section>
         </main>
         <script src="./script.js"></script>
